@@ -1,0 +1,219 @@
+@import 'tailwindcss';
+
+/* Dark mode is driven by <html data-theme="dark"> (see initializeTheme.ts). */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+:root {
+  --sat: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+  --sar: var(--safe-area-inset-right, env(safe-area-inset-right, 0px));
+  --sab: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+  --sal: var(--safe-area-inset-left, env(safe-area-inset-left, 0px));
+
+  --c-canvas: #f7f7f7;
+  --c-grouped: #ededed;
+  --c-chat: #ededed;
+  --c-nav: #ededed;
+  --c-surface: #ffffff;
+  --c-soft: #ededed;
+  --c-ink: rgba(0, 0, 0, 0.9);
+  --c-muted: rgba(0, 0, 0, 0.55);
+  --c-placeholder: rgba(0, 0, 0, 0.3);
+  --c-line: rgba(0, 0, 0, 0.1);
+  --c-link: #576b95;
+  --c-accent: #07c160;
+  --c-onaccent: #ffffff;
+  --c-bubble: #95ec69;
+  --c-onbubble: rgba(0, 0, 0, 0.9);
+  --c-danger: #fa5151;
+  --c-warning: #fa9d3b;
+  --c-success: #07c160;
+  --c-success-bg: #e8f7ee;
+  --c-entry-highlight: #ffd84d;
+}
+
+[data-theme='dark'] {
+  --c-canvas: #1e1e1e;
+  --c-grouped: #111111;
+  --c-chat: #111111;
+  --c-nav: #191919;
+  --c-surface: #191919;
+  --c-soft: #2c2c2c;
+  --c-ink: rgba(255, 255, 255, 0.8);
+  --c-muted: rgba(255, 255, 255, 0.5);
+  --c-placeholder: rgba(255, 255, 255, 0.3);
+  --c-line: rgba(255, 255, 255, 0.1);
+  --c-link: #7d90b7;
+  --c-accent: #07c160;
+  --c-onaccent: rgba(255, 255, 255, 0.8);
+  --c-bubble: #3eb575;
+  --c-onbubble: rgba(0, 0, 0, 0.9);
+  --c-danger: #fa5151;
+  --c-warning: #c87d2f;
+  --c-success: #07c160;
+  --c-success-bg: #123321;
+  --c-entry-highlight: #ffd23f;
+}
+
+/* Inline so the generated utilities reference the runtime vars above and
+   follow theme switching. */
+@theme inline {
+  --color-canvas: var(--c-canvas);
+  --color-grouped: var(--c-grouped);
+  --color-chat: var(--c-chat);
+  --color-nav: var(--c-nav);
+  --color-surface: var(--c-surface);
+  --color-soft: var(--c-soft);
+  --color-ink: var(--c-ink);
+  --color-muted: var(--c-muted);
+  --color-placeholder: var(--c-placeholder);
+  --color-line: var(--c-line);
+  --color-link: var(--c-link);
+  --color-accent: var(--c-accent);
+  --color-onaccent: var(--c-onaccent);
+  --color-bubble: var(--c-bubble);
+  --color-onbubble: var(--c-onbubble);
+  --color-danger: var(--c-danger);
+  --color-warning: var(--c-warning);
+  --color-success: var(--c-success);
+  --color-success-bg: var(--c-success-bg);
+
+  --font-sans: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* Safe-area helpers — env() can't be expressed as a spacing token, so expose
+   them as first-class utilities. */
+@utility safe-top {
+  padding-top: var(--sat);
+}
+@utility safe-bottom {
+  padding-bottom: var(--sab);
+}
+
+@layer base {
+  * {
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  *:not(input, textarea) {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  *::-webkit-scrollbar {
+    display: none;
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
+    margin: 0;
+  }
+
+  body {
+    background: var(--c-canvas);
+    color: var(--c-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button {
+    color: inherit;
+    background: transparent;
+  }
+
+  img {
+    -webkit-user-drag: none;
+  }
+
+  textarea {
+    resize: none;
+  }
+}
+
+/* react-photo-view renders outside our page shell, so apply native safe-area
+   padding to its own toolbar controls. */
+.PhotoView-Slider__BannerWrap {
+  box-sizing: border-box;
+  height: calc(44px + var(--sat));
+  padding-top: var(--sat);
+  padding-left: var(--sal);
+  padding-right: var(--sar);
+}
+
+.PhotoView-Slider__ArrowLeft {
+  left: var(--sal);
+}
+
+.PhotoView-Slider__ArrowRight {
+  right: var(--sar);
+}
+
+@keyframes voice-wifi-playing {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  45% {
+    opacity: 1;
+  }
+}
+
+.voice-wifi-playing path:nth-child(2),
+.voice-wifi-playing path:nth-child(3),
+.voice-wifi-playing path:nth-child(4) {
+  animation: voice-wifi-playing 1.4s ease-in-out infinite;
+}
+
+.voice-wifi-playing path:nth-child(4) {
+  animation-delay: 0s;
+}
+
+.voice-wifi-playing path:nth-child(3) {
+  animation-delay: 0.16s;
+}
+
+.voice-wifi-playing path:nth-child(2) {
+  animation-delay: 0.32s;
+}
+
+@keyframes transcribe-dot {
+  0%,
+  70%,
+  100% {
+    opacity: 0.2;
+  }
+  35% {
+    opacity: 1;
+  }
+}
+
+.transcribe-dot {
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: transcribe-dot 1.2s ease-in-out infinite;
+}
+
+.islet-video-player .xgplayer .xgplayer-progress-played {
+  background: var(--c-accent);
+}
+
+.islet-video-player .xgplayer .xgplayer-progress-btn {
+  background: rgba(7, 193, 96, 0.3);
+  border-color: rgba(7, 193, 96, 0.08);
+  box-shadow: 0 0 1px rgba(7, 193, 96, 0.55);
+}
+
+.islet-video-player .xgplayer .xgplayer-progress-btn.active {
+  border-color: rgba(7, 193, 96, 0.1);
+}
+
+.islet-video-player .xgplayer .xgplayer-progress-btn.active:before {
+  box-shadow: 0 0 3px rgba(7, 193, 96, 0.68);
+}

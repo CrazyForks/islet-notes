@@ -1,0 +1,2 @@
+export const PROJECT_COMMIT_HASH = __PROJECT_COMMIT_HASH__;
+export const APP_VERSION = __APP_VERSION__;

@@ -1,0 +1,48 @@
+/* 定位到某条消息时的高亮:黄色覆盖层瞬间亮起、短暂停留后平滑淡出,
+   贴着所在气泡/图片的圆角。覆盖层由各消息块按 entryId 渲染,
+   语音条与识别文本共用同一 id,因此一起点亮、一起淡出又各自保留圆角。 */
+@keyframes islet-entry-highlight {
+  0% {
+    opacity: 0;
+  }
+  6% {
+    opacity: 0.78;
+  }
+  20% {
+    opacity: 0.78;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.islet-entry-highlight {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: var(--c-entry-highlight);
+  pointer-events: none;
+  opacity: 0;
+  animation: islet-entry-highlight 1.95s ease-out forwards;
+}
+
+/* 复刻气泡右侧尖角(与 .after 尾巴几何对齐),让尾巴随气泡主体一起变色。 */
+.islet-entry-highlight-tail::after {
+  content: '';
+  position: absolute;
+  right: -0.25rem;
+  top: 15px;
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 1px;
+  background: var(--c-entry-highlight);
+  transform: rotate(45deg);
+}
+
+/* 开启“减少动态效果”时退化为近乎瞬时,不产生持续动效。 */
+@media (prefers-reduced-motion: reduce) {
+  .islet-entry-highlight {
+    animation-duration: 0.01ms;
+  }
+}

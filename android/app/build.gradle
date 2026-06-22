@@ -1,0 +1,99 @@
+apply plugin: 'com.android.application'
+
+def localSigningPropertiesFile = rootProject.file('signing/keystore.properties')
+def localSigningProperties = new Properties()
+if (localSigningPropertiesFile.exists()) {
+    localSigningPropertiesFile.withInputStream { localSigningProperties.load(it) }
+}
+def hasLocalSigning = ['storeFile', 'storePassword', 'keyAlias', 'keyPassword'].every {
+    localSigningProperties.getProperty(it)
+}
+def releaseVersionFile = rootProject.file('version')
+def releaseVersionProperties = new Properties()
+if (releaseVersionFile.exists()) {
+    releaseVersionFile.withInputStream { releaseVersionProperties.load(it) }
+}
+def releaseVersionCode = (releaseVersionProperties.getProperty('versionCode') ?: '1') as Integer
+def releaseVersionName = releaseVersionProperties.getProperty('versionName') ?: '1.0'
+
+android {
+    namespace = "com.hamsterbase.islet"
+    compileSdk = rootProject.ext.compileSdkVersion
+    defaultConfig {
+        applicationId "com.hamsterbase.islet"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode releaseVersionCode
+        versionName releaseVersionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        aaptOptions {
+             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
+             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
+            ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+        }
+    }
+    signingConfigs {
+        local {
+            if (hasLocalSigning) {
+                storeFile rootProject.file(localSigningProperties.getProperty('storeFile'))
+                storePassword localSigningProperties.getProperty('storePassword')
+                keyAlias localSigningProperties.getProperty('keyAlias')
+                keyPassword localSigningProperties.getProperty('keyPassword')
+            }
+        }
+    }
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+            if (hasLocalSigning) {
+                signingConfig signingConfigs.local
+            }
+        }
+        release {
+            minifyEnabled false
+            if (hasLocalSigning) {
+                signingConfig signingConfigs.local
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    flatDir{
+        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
+    implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
+    implementation "androidx.exifinterface:exifinterface:1.4.1"
+    implementation project(':capacitor-android')
+    // WebDavHttpPlugin: arbitrary HTTP methods (MKCOL/PROPFIND) with binary-safe bodies.
+    implementation "com.squareup.okhttp3:okhttp:4.12.0"
+    // VideoToolsPlugin: 视频转码（720p H.264 MP4 + AAC）。
+    implementation "androidx.media3:media3-transformer:1.10.1"
+    implementation "androidx.media3:media3-effect:1.10.1"
+    implementation "androidx.media3:media3-common:1.10.1"
+    testImplementation "junit:junit:$junitVersion"
+    testImplementation "org.json:json:20250517"
+    testImplementation "org.robolectric:robolectric:4.15.1"
+    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+    implementation project(':capacitor-cordova-android-plugins')
+}
+
+apply from: 'capacitor.build.gradle'
+
+try {
+    def servicesJSON = file('google-services.json')
+    if (servicesJSON.text) {
+        apply plugin: 'com.google.gms.google-services'
+    }
+} catch(Exception e) {
+    logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
+}

@@ -1,0 +1,8 @@
+{
+  "recoveryKey": "  islet golden recovery key  ",
+  "recoveryKeyHash": "cff00aa5adc8c151432b229614bed0a4bb92cbcd629245486b0a1bb14a65ae9a",
+  "plaintextUtf8": "Islet attachment golden vector\n二进制格式固定\n",
+  "saltBase64": "ABEiM0RVZneImaq7zN3u/w==",
+  "ivBase64": "ECEyQ1RldoeYqbrL",
+  "payloadBase64": "Y2hhdC1kaWFyeS1hdHRhY2htZW50LXYxCgAAAP17InR5cGUiOiJjaGF0LWRpYXJ5LWF0dGFjaG1lbnQiLCJ2ZXJzaW9uIjoxLCJhbGdvcml0aG0iOiJBRVMtR0NNIiwia2RmIjp7Im5hbWUiOiJQQktERjItU0hBLTI1NiIsIml0ZXJhdGlvbnMiOjI1MDAwMCwic2FsdCI6IkFCRWlNMFJWWm5lSW1hcTd6TjN1L3c9PSJ9LCJrZXlIYXNoIjoiY2ZmMDBhYTVhZGM4YzE1MTQzMmIyMjk2MTRiZWQwYTRiYjkyY2JjZDYyOTI0NTQ4NmIwYTFiYjE0YTY1YWU5YSIsIml2IjoiRUNFeVExUmxkb2VZcWJyTCJ96K68OoszLmE0+d2myFCspcIrRg6dH12/UxTPXK0Kc/pBNjX9UULKZLgI/mgOaXzHubM1Ix2Vlv0WKIt+ONB+B0PCdqOE"
+}

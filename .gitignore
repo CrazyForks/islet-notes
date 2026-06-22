@@ -1,0 +1,21 @@
+node_modules/
+dist/
+coverage/
+.vitest-attachments/
+.env.local
+
+# Android local files and generated outputs
+android/.gradle/
+android/**/build/
+android/local.properties
+android/signing/
+android/version
+android/capacitor-cordova-android-plugins/
+android/app/src/main/assets/public/
+android/app/src/main/assets/capacitor.config.json
+android/app/src/main/assets/capacitor.plugins.json
+android/app/src/main/res/xml/config.xml
+android/**/*.apk
+android/**/*.aab
+android/**/*.aar
+android/**/*.ap_

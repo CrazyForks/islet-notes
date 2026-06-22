@@ -1,0 +1,142 @@
+import { useService } from '@/hooks/use-service';
+import { FormPage } from '@/mobile/components/layout/FormPage';
+import { HeaderLayoutPage } from '@/mobile/components/layout/HeaderLayoutPage';
+import { FormGroup } from '@/mobile/components/WeuiForm';
+import { useForm } from '@/mobile/hooks/useForm';
+import { useLoadingToast } from '@/mobile/overlay/loadingToast/useLoadingToast';
+import { useSuccessToast } from '@/mobile/overlay/successToast/useSuccessToast';
+import { useTopTips } from '@/mobile/overlay/topTips/useTopTips';
+import { SpeechRecognitionSettings } from '@/mobile/test.id';
+import { styles } from '@/mobile/styles/ui';
+import { localize } from '@/nls';
+import { IHostService } from '@/services/native/common/hostService';
+import {
+  SPEECH_RECOGNITION_CONFIG_KEY,
+  SPEECH_RECOGNITION_CONFIG_SWR_KEY,
+  type SpeechRecognitionConfigRecord,
+} from '@/services/speechRecognition/common/speechRecognitionConfig';
+import { ISpeechRecognitionService } from '@/services/speechRecognition/common/speechRecognitionService';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
+import { mutate } from 'swr';
+
+type SpeechRecognitionFormValues = {
+  apiKey: string;
+  secretKey: string;
+  autoTranscribe: boolean;
+};
+
+export function SettingsSpeechRecognitionAddPage() {
+  const navigate = useNavigate();
+  const hostService = useService(IHostService);
+  const speechRecognitionService = useService(ISpeechRecognitionService);
+  const showLoadingToast = useLoadingToast();
+  const showSuccessToast = useSuccessToast();
+  const showTopTips = useTopTips();
+  const [saving, setSaving] = useState(false);
+  const form = useForm<SpeechRecognitionFormValues>({
+    initialValues: {
+      autoTranscribe: true,
+    },
+    requiredMessage: (field) =>
+      localize('settings.speechRecognition.required', '{0} is required.', field.label),
+    fields: [
+      {
+        name: 'apiKey',
+        label: 'API Key',
+        type: 'text',
+        testId: SpeechRecognitionSettings.apiKey,
+        required: true,
+      },
+      {
+        name: 'secretKey',
+        label: 'Secret Key',
+        type: 'password',
+        testId: SpeechRecognitionSettings.secretKey,
+        required: true,
+      },
+      {
+        name: 'autoTranscribe',
+        label: localize('settings.speechRecognition.autoTranscribe', 'Auto-transcribe voice'),
+        type: 'checkbox',
+        testId: SpeechRecognitionSettings.autoTranscribe,
+      },
+    ],
+  });
+
+  const save = async () => {
+    if (saving || !form.verify()) return;
+    const config = {
+      apiKey: form.values.apiKey,
+      secretKey: form.values.secretKey,
+    };
+    const loadingToast = showLoadingToast({
+      message: localize('settings.speechRecognition.testing', 'Testing connection...'),
+    });
+    setSaving(true);
+    try {
+      await speechRecognitionService.testConfig(config);
+      const nextConfig = await hostService.savePreference<SpeechRecognitionConfigRecord>(
+        SPEECH_RECOGNITION_CONFIG_KEY,
+        {
+          provider: 'baidu',
+          apiKey: config.apiKey.trim(),
+          secretKey: config.secretKey.trim(),
+          autoTranscribe: form.values.autoTranscribe,
+        },
+      );
+      await mutate(SPEECH_RECOGNITION_CONFIG_SWR_KEY, nextConfig, {
+        revalidate: false,
+      });
+      showSuccessToast({ message: localize('settings.speechRecognition.saved', 'Saved') });
+      navigate('/settings/speech-recognition', { replace: true });
+    } catch (error) {
+      showTopTips({
+        message:
+          error instanceof Error
+            ? error.message
+            : localize('settings.speechRecognition.testFailed', 'Connection failed'),
+      });
+    } finally {
+      loadingToast.dispose();
+      setSaving(false);
+    }
+  };
+
+  return (
+    <HeaderLayoutPage
+      rootClassName={styles.Page.SurfaceRoot}
+      contentClassName={styles.WeuiForm.PageMain}
+      pageTestId={SpeechRecognitionSettings.page}
+      contentTestId={SpeechRecognitionSettings.content}
+      header={{ showBack: true, tone: 'surface' }}
+    >
+      <FormPage
+        title={localize('settings.speechRecognition.addTitle', 'Configure Baidu AI Cloud')}
+        description={localize(
+          'settings.speechRecognition.addFormDesc',
+          'Turn voice messages into text, up to 59 seconds.',
+        )}
+        actions={[
+          {
+            label: localize('common.save', 'Save'),
+            testId: SpeechRecognitionSettings.save,
+            disabled: saving,
+            onClick: () => void save(),
+          },
+        ]}
+      >
+        <FormGroup
+          title={localize('settings.speechRecognition.configInfo', 'Configuration')}
+          items={form.fields}
+        />
+        <p className={styles.WeuiForm.Description}>
+          {localize(
+            'settings.speechRecognition.consoleHint',
+            'Create an app in the Baidu AI Cloud console and enable Short Speech Recognition Pro to get the API Key and Secret Key. These credentials are used for automatic transcription after sending voice messages and manual transcription from a voice message.',
+          )}
+        </p>
+      </FormPage>
+    </HeaderLayoutPage>
+  );
+}
