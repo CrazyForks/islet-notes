@@ -1,0 +1,4 @@
+#include "Pods/Target Support Files/Pods-App/Pods-App.debug.xcconfig"
+MARKETING_VERSION = 1.0
+CURRENT_PROJECT_VERSION = 1
+#include? "project.version.xcconfig"

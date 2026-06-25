@@ -10,6 +10,8 @@
     "check": "tsc -b",
     "android:sync": "capacitor sync android",
     "android:open": "capacitor open android",
+    "ios:sync": "capacitor sync ios",
+    "ios:open": "capacitor open ios",
     "release:android": "node scripts/release-android.mjs"
   },
   "dependencies": {
@@ -40,6 +42,7 @@
   "devDependencies": {
     "@capacitor/android": "^8.4.0",
     "@capacitor/cli": "^8.4.0",
+    "@capacitor/ios": "8.4.0",
     "@tailwindcss/postcss": "^4.0.13",
     "@types/node": "^22.13.1",
     "@types/react": "^18.3.18",

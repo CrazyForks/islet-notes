@@ -241,8 +241,8 @@ export class CapacitorNativeService implements IHostService {
     try {
       const result = await NativeAttachmentFileCache.ensureCachedFile(options);
       if (!result.path) return undefined;
-      const response = await fetch(Capacitor.convertFileSrc(result.path));
-      if (!response.ok) return undefined;
+      const response = await fetch(toNativeFileSrc(result.path));
+      if (!isReadableNativeFileResponse(response)) return undefined;
       return await response.blob();
     } catch {
       return undefined;
@@ -380,27 +380,39 @@ export class CapacitorNativeService implements IHostService {
 }
 
 function caniuseHostFeature(feature: HostFeature): boolean {
+  const platform = Capacitor.getPlatform();
+  const nativeMobile = platform === 'android' || platform === 'ios';
   switch (feature) {
     case 'generateThumbnail':
-      return Capacitor.getPlatform() === 'android';
+      return nativeMobile;
     case 'webDavHttpRequest':
-      return Capacitor.getPlatform() === 'android';
+      return nativeMobile;
     case 'attachmentFileCache':
-      return Capacitor.getPlatform() === 'android';
+      return nativeMobile;
     case 'videoUpload':
-      return Capacitor.getPlatform() === 'android';
+      return nativeMobile;
     case 'videoTranscode':
-      return Capacitor.getPlatform() === 'android';
+      return nativeMobile;
   }
 }
 
 async function readNativeFileBlob(path: string): Promise<Blob> {
   // 通过 WebView 文件协议读取，避免将上百 MB 的视频经 base64 往返内存。
-  const response = await fetch(Capacitor.convertFileSrc(path));
-  if (!response.ok) {
+  const response = await fetch(toNativeFileSrc(path));
+  if (!isReadableNativeFileResponse(response)) {
     throw new Error(`Local file is missing. (${response.status})`);
   }
   return response.blob();
+}
+
+function isReadableNativeFileResponse(response: Response): boolean {
+  // Capacitor iOS 的 mp4 等媒体文件走 URLResponse 而不是 HTTPURLResponse，
+  // WebView fetch 会得到 status 0，但 body 仍然可读。
+  return response.ok || response.status === 0;
+}
+
+function toNativeFileSrc(path: string): string {
+  return Capacitor.convertFileSrc(encodeURI(path).replace(/\?/g, '%3F').replace(/#/g, '%23'));
 }
 
 function parseResolution(resolution: string | undefined): { width: number; height: number } {
@@ -421,7 +433,7 @@ async function toHostVideoPick(
   const height = record.height || metadataResolution.height;
   return {
     sourcePath: record.sourcePath,
-    webPath: Capacitor.convertFileSrc(record.sourcePath),
+    webPath: toNativeFileSrc(record.sourcePath),
     thumbnail: record.thumbnailBase64
       ? `data:image/jpeg;base64,${record.thumbnailBase64}`
       : media.thumbnail

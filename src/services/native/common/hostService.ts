@@ -17,17 +17,17 @@ export interface IHostService {
   pickImageBlob(source: ImagePickSource): Promise<Blob | undefined>;
 
   /**
-   * 仅 Android：从相册单选一项媒体，可能是图片或视频，用户取消时返回 undefined。
+   * 原生端：从相册单选一项媒体，可能是图片或视频，用户取消时返回 undefined。
    */
   pickMediaFromGallery(options?: HostMediaPickOptions): Promise<HostGalleryPick | undefined>;
-  /** 仅 Android：调用系统相机录像并保存到相册，用户取消时返回 undefined。 */
+  /** 原生端：调用系统相机录像并保存到相册，用户取消时返回 undefined。 */
   recordVideo(options?: HostVideoRecordOptions): Promise<HostVideoPick | undefined>;
   /**
-   * 仅 Android：基于 app 私有视频源准备本次上传 payload；
+   * 原生端：基于 app 私有视频源准备本次上传 payload；
    * originalQuality 为 true 时跳过重编码、按原片处理。
    */
   prepareVideoUpload(options: HostPrepareVideoUploadOptions): Promise<HostVideoPrepareResult>;
-  /** 仅 Android：清理 app 私有视频源。 */
+  /** 原生端：清理 app 私有视频源。 */
   cleanVideoRecord(options: HostCleanVideoRecordOptions): Promise<void>;
   /** 附件明文文件存储：固定写入应用数据目录，写入必须保证原子替换。 */
   writeAttachmentFile(options: HostWriteAttachmentFileOptions): Promise<void>;

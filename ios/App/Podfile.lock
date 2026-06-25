@@ -1,0 +1,63 @@
+PODS:
+  - Capacitor (8.4.0):
+    - CapacitorCordova
+  - CapacitorApp (8.1.0):
+    - Capacitor
+  - CapacitorCamera (8.2.0):
+    - Capacitor
+    - IONCameraLib (~> 1.0.4)
+  - CapacitorClipboard (8.0.1):
+    - Capacitor
+  - CapacitorCordova (8.4.0)
+  - CapacitorFilesystem (8.1.2):
+    - Capacitor
+    - IONFilesystemLib (~> 1.1.1)
+  - CapacitorPreferences (8.0.1):
+    - Capacitor
+  - IONCameraLib (1.0.4)
+  - IONFilesystemLib (1.1.2)
+
+DEPENDENCIES:
+  - "Capacitor (from `../../node_modules/.pnpm/@capacitor+ios@8.4.0_@capacitor+core@8.4.0/node_modules/@capacitor/ios`)"
+  - "CapacitorApp (from `../../node_modules/.pnpm/@capacitor+app@8.1.0_@capacitor+core@8.4.0/node_modules/@capacitor/app`)"
+  - "CapacitorCamera (from `../../node_modules/.pnpm/@capacitor+camera@8.2.0_@capacitor+core@8.4.0/node_modules/@capacitor/camera`)"
+  - "CapacitorClipboard (from `../../node_modules/.pnpm/@capacitor+clipboard@8.0.1_@capacitor+core@8.4.0/node_modules/@capacitor/clipboard`)"
+  - "CapacitorCordova (from `../../node_modules/.pnpm/@capacitor+ios@8.4.0_@capacitor+core@8.4.0/node_modules/@capacitor/ios`)"
+  - "CapacitorFilesystem (from `../../node_modules/.pnpm/@capacitor+filesystem@8.1.2_@capacitor+core@8.4.0/node_modules/@capacitor/filesystem`)"
+  - "CapacitorPreferences (from `../../node_modules/.pnpm/@capacitor+preferences@8.0.1_@capacitor+core@8.4.0/node_modules/@capacitor/preferences`)"
+
+SPEC REPOS:
+  trunk:
+    - IONCameraLib
+    - IONFilesystemLib
+
+EXTERNAL SOURCES:
+  Capacitor:
+    :path: "../../node_modules/.pnpm/@capacitor+ios@8.4.0_@capacitor+core@8.4.0/node_modules/@capacitor/ios"
+  CapacitorApp:
+    :path: "../../node_modules/.pnpm/@capacitor+app@8.1.0_@capacitor+core@8.4.0/node_modules/@capacitor/app"
+  CapacitorCamera:
+    :path: "../../node_modules/.pnpm/@capacitor+camera@8.2.0_@capacitor+core@8.4.0/node_modules/@capacitor/camera"
+  CapacitorClipboard:
+    :path: "../../node_modules/.pnpm/@capacitor+clipboard@8.0.1_@capacitor+core@8.4.0/node_modules/@capacitor/clipboard"
+  CapacitorCordova:
+    :path: "../../node_modules/.pnpm/@capacitor+ios@8.4.0_@capacitor+core@8.4.0/node_modules/@capacitor/ios"
+  CapacitorFilesystem:
+    :path: "../../node_modules/.pnpm/@capacitor+filesystem@8.1.2_@capacitor+core@8.4.0/node_modules/@capacitor/filesystem"
+  CapacitorPreferences:
+    :path: "../../node_modules/.pnpm/@capacitor+preferences@8.0.1_@capacitor+core@8.4.0/node_modules/@capacitor/preferences"
+
+SPEC CHECKSUMS:
+  Capacitor: 75bd117ba037a51bb0f19ded32c67f4b3bc16600
+  CapacitorApp: 449ffe26375e96f8aaaee625ac6e01e5c57c8650
+  CapacitorCamera: 8f6acf83664118321111e76acef86390211ccb08
+  CapacitorClipboard: c75fdaa6e622111119f35e7914ecfc67b05efecb
+  CapacitorCordova: 71d81f350e6c30bf2a846593b5c480fbd68e9bac
+  CapacitorFilesystem: 2db285a1ac6e475cc27cae2e1bea999000f9e2be
+  CapacitorPreferences: cca2021f386efb75947c850334447d9ff22b14f1
+  IONCameraLib: f2349804460bd9e3f892e42109b8d996ab3fa19d
+  IONFilesystemLib: 21a63377696b2d8fab5632ecfb7d2ac67bddb68a
+
+PODFILE CHECKSUM: 3f0f37710b7a4f10dee71b699e18e82e002398a0
+
+COCOAPODS: 1.16.2
